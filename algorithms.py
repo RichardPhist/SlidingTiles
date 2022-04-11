@@ -5,21 +5,6 @@ from GameFrame import game
 
 EXPAND_LIMIT = 2000000
 
-def breadthFirstSearch(start: str, goal: str, size: int) -> Tuple[str, int]:
-    numExpands = 0
-    zeroInd = start.index('0')
-    start = list(start)
-    goal = list(goal)
-
-    queue = [start, zeroInd, ""]
-    visited = {}
-
-    while len(queue) > 0:
-        if numExpands > EXPAND_LIMIT:
-            return (f'exceeded limit of {EXPAND_LIMIT} expansions', numExpands)
-
-        
-
 def expand(stateTuple: Tuple[str, int, str], size: int) -> List[Tuple[str, int, str]]:
     state, zeroInd, moves = stateTuple
 
@@ -49,3 +34,21 @@ def expand(stateTuple: Tuple[str, int, str], size: int) -> List[Tuple[str, int, 
             newStateTuples.append((newState, newZeroInd, moves + move))
 
     return newStateTuples
+
+def out_of_place(state: str, goal: str) -> int:
+    """
+    Out of place heuristic
+    Iterates through both strings comparing each character
+    for each character not at the correct index
+    increment the number of characters out of place
+    """
+    numOutOfPlace = 0
+    for i in range(len(state)):
+        if state[i] != goal[i]:
+            numOutOfPlace += 1
+    return numOutOfPlace
+
+def manhattan_distance(state: str, goal: str, size: int) -> int:
+    totalManDist = 0
+
+    return totalManDist

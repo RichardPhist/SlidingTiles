@@ -47,8 +47,7 @@ class game:
 
     def doMoves(cls, state: str, moveList: str, size: int, zeroInd: int = -1) -> Tuple[List[str], int]:
         #function that calls other move functions
-        #takes current state, list of moves, size, and index of 0
-        #as arguments
+        #takes current state, list of moves, size, and index of 0 as arguments
         state = list(state)
 
         if zeroInd < 0:
