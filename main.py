@@ -8,7 +8,7 @@ def main():
 
     test = game()
 
-    #test.doMoves(poo, "dd", 3, -1)
+    test.doMoves(poo, "dd", 3, -1)
 
     print(algorithms.out_of_place(poo, pee))
 
