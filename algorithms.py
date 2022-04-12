@@ -73,9 +73,16 @@ def colOffset(tile, tileIndex, gameSize) -> int:
     return abs(conversion(tile) % gameSize - tileIndex % gameSize)
 
 def conversion(tile) -> int:
+    """
+    helper function for manhattan distance used to
+    get goal index of a tile
+    """
+
+    #dictionary for characters and their indexes in 4x4 game
     webster = {"A": 9, "B": 10, "C": 11,"D": 12, "E": 13, "F": 14}
     retValue = webster.get(tile)
     if not retValue:
+        #goal indexes of numbered tiles are their values-1
         return int(tile) - 1
     else:
         return retValue
