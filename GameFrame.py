@@ -9,9 +9,9 @@ class game:
         state[y] = temp
         return state
 
-    def left(cls, state: List[str], zeroInd: int, gameSize: int) -> Tuple[List[str], int]:
+    def left(cls, state: List[str], zeroInd: int, size: int) -> Tuple[List[str], int]:
         #moves the 0 tile to the left
-        if zeroInd % gameSize == 0:
+        if zeroInd % size == 0:
             return (state, zeroInd)
         
         state = cls.swap(state, zeroInd, zeroInd - 1)
@@ -39,7 +39,7 @@ class game:
     def down(cls, state: List[str], zeroInd: int, size: int) -> Tuple[List[str], int]:
         #moves the 0 tile down
         if zeroInd >= size * (size - 1):
-            return (size, zeroInd)
+            return (state, zeroInd)
         
         state = cls.swap(state, zeroInd, zeroInd + size)
         zeroInd = zeroInd + size
@@ -48,32 +48,32 @@ class game:
     def doMoves(cls, state: str, moveList: str, size: int, zeroInd: int = -1) -> Tuple[List[str], int]:
         #function that calls other move functions
         #takes current state, list of moves, size, and index of 0 as arguments
-        state = list(state)
+        retState = list(state)
 
         if zeroInd < 0:
-            zeroInd = state.index('0')
+            zeroInd = retState.index('0')
         for move in moveList:
 
-            cls.print_puzzle(state, size)
-            print()
-            print(move)
+            #cls.print_puzzle(state, size)
+            #print()
+            #print(move)
 
             if move == 'l':
-                state, zeroInd = cls.left(state, zeroInd, size)
+                retState, zeroInd = cls.left(retState, zeroInd, size)
                 
             elif move == 'r':
-                state, zeroInd = cls.right(state, zeroInd, size)
+                retState, zeroInd = cls.right(retState, zeroInd, size)
                 
             elif move == 'd':
-                state, zeroInd = cls.down(state, zeroInd, size)
+                retState, zeroInd = cls.down(retState, zeroInd, size)
                 
             elif move == 'u':
-                state, zeroInd = cls.up(state, zeroInd, size)
+                retState, zeroInd = cls.up(retState, zeroInd, size)
                 
 
-        cls.print_puzzle(state, size)
+        #cls.print_puzzle(state, size)
         
-        return (state, zeroInd)
+        return (retState, zeroInd)
 
     def print_puzzle(cls, puzzle: List[str], size: int):
         #helper function prints out state of the game

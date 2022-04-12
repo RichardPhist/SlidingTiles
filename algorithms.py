@@ -5,55 +5,58 @@ from typing import Tuple
 from GameFrame import game
 
 EXPAND_LIMIT = 2000000
+gameinstance = game()
 
-def breadth_first_search(state: str, goal: str, gameSize: int):
+def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
+    numOfExpands = 0
     initState = state
     zeroInd = state.index('0')
-    goalState = goal
 
     queue = [(initState, zeroInd, "")]
-    visited = []
+    visited = {}
 
-    currState = queue.pop(0) #sets the current state as the initial state
-
-    if visited.index(currState) != currState:
+    while len(queue) > 0:
         
-        expand
+        if numOfExpands > EXPAND_LIMIT:
+            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+
+        currState = queue.pop(0) #makes the current state of the game the state of the game that pops off the queue
+        (currStringOfGame, indOfZero, moves) = currState 
+        #unpacks and assigns values to new tuple
+
+        if currStringOfGame == goal:
+            #once goal state is found return the moves and num of expands to get there
+            return(moves, numOfExpands)
+
+        numOfExpands += 1
+
+        for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
+            if not visited.get(str(currStringOfGame)):
+                #if the state is not visited already explore
+                visited[str(currStringOfGame)] = True
+                queue.append((''.join(currStringOfGame), indOfZero, moves))
+                #updates queue with tuple of string of game, index of 0, and moves taken
+
+    return ('FAILURE', numOfExpands)
         
 
-
-
-
-"""def expand(stateTuple: Tuple[str, int, str], size: int) -> List[Tuple[str, int, str]]:
-    state, zeroInd, moves = stateTuple
-
-    possMoves = ['l', 'u', 'r', 'd']
-
-    invMoves = {
-        'l': 'r',
-        'r': 'l',
-        'u': 'd',
-        'd': 'u'
-    }
-
-    # don't expand on inverse of last move as it will
-    # immediately be rejected as a prior state
-    if moves:
-        possMoves.remove(invMoves[moves[-1]])
-
-    newStateTuples = []
-    expPuzzle = game()
+def expand(stateOfGame: Tuple[str, int, str], gameSize: int) -> List[Tuple[str, int, str]]:
+    """
+    Function that takes state of the game (stringOfGame, index of 0, moves to be done) and
+    game size (sqrt(len(stringOfGame))) as arugments
+    Performs each move and updates the moves done after each move
+    """
+    #unpack and assign values of new tuple
+    (currState, newZeroInd, listOfMoves) = stateOfGame
+    possMoves = ['u', 'd', 'r', 'l']
+    retArray = []
 
     for move in possMoves:
-        newState, newZeroInd = expPuzzle.doMoves(state=state,
-                                                moveList=move,
-                                                zeroInd=zeroInd,
-                                                size=size)
-        if newState != state:
-            newStateTuples.append((newState, newZeroInd, moves + move))
+        (tempState, tempZeroInd) = gameinstance.doMoves(currState, [move], gameSize)
+        retArray.append((tempState, tempZeroInd, listOfMoves + move))
+        #print(tempState, tempZeroInd, move)
 
-    return newStateTuples
-    """
+    return retArray
 
 def out_of_place(state: str, goal: str) -> int:
     """
