@@ -86,7 +86,7 @@ def expand(stateOfGame: Tuple[str, int, str], gameSize: int) -> List[Tuple[str, 
     for move in possMoves:
         (tempState, tempZeroInd) = gameinstance.doMoves(currState, [move], gameSize)
         retArray.append((tempState, tempZeroInd, listOfMoves + move))
-        print(tempState, tempZeroInd, move)
+        #print(tempState, tempZeroInd, move)
 
     return retArray
 
@@ -107,6 +107,7 @@ def manhattan_distance(state: str, gameSize: int) -> int:
     """
     Manhattan distance heuristic
     finds the total manhattan distanc of the game
+    running sum of total offsets of chars and indexes
     """
     totalManDist = 0
     for char in state:
