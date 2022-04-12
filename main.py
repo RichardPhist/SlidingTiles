@@ -9,9 +9,12 @@ def main():
 
     test = game()
 
-    test.doMoves(poo, "dd", 3, -1)
+    #test.doMoves(poo, "dd", 3)
+    test.print_puzzle(poo, 3)
 
-    #print(algorithms.out_of_place(poo, pee))
+    algorithms.breadth_first_search(poo, pee, 3)
+
+    print(algorithms.out_of_place(poo, pee))
     print("{0}".format(algorithms.manhattan_distance(poo, math.sqrt(len(poo)))))
 
 

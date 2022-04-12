@@ -6,6 +6,22 @@ from GameFrame import game
 
 EXPAND_LIMIT = 2000000
 
+def breadth_first_search(state: str, goal: str, gameSize: int):
+    initState = state
+    zeroInd = state.index('0')
+    goalState = goal
+
+    queue = [(initState, zeroInd, "")]
+    visited = {}
+
+    if visited.index(currState) != currState:
+        expand
+        
+
+
+
+
+
 def expand(stateTuple: Tuple[str, int, str], size: int) -> List[Tuple[str, int, str]]:
     state, zeroInd, moves = stateTuple
 

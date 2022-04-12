@@ -9,9 +9,9 @@ class game:
         state[y] = temp
         return state
 
-    def left(cls, state: List[str], zeroInd: int, size: int) -> Tuple[List[str], int]:
+    def left(cls, state: List[str], zeroInd: int, gameSize: int) -> Tuple[List[str], int]:
         #moves the 0 tile to the left
-        if zeroInd % size == 0:
+        if zeroInd % gameSize == 0:
             return (state, zeroInd)
         
         state = cls.swap(state, zeroInd, zeroInd - 1)
@@ -54,9 +54,9 @@ class game:
             zeroInd = state.index('0')
         for move in moveList:
 
-            #cls.print_puzzle(state, size)
-            #print()
-            #print(move)
+            cls.print_puzzle(state, size)
+            print()
+            print(move)
 
             if move == 'l':
                 state, zeroInd = cls.left(state, zeroInd, size)
@@ -71,7 +71,7 @@ class game:
                 state, zeroInd = cls.up(state, zeroInd, size)
                 
 
-        #cls.print_puzzle(state, size)
+        cls.print_puzzle(state, size)
         
         return (state, zeroInd)
 
