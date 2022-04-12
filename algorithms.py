@@ -14,8 +14,8 @@ def breadth_first_search(state: str, goal: str, gameSize: int):
     queue = [(initState, zeroInd, "")]
     visited = {}
 
-    if visited.index(currState) != currState:
-        expand
+    #if visited.index(currState) != currState:
+        #expand
         
 
 
