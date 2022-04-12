@@ -18,6 +18,7 @@ def main():
     #print("{0}".format(algorithms.manhattan_distance(poo, math.sqrt(len(poo)))))
 
     algorithms.breadth_first_search(stupid, pee, 3)
+    algorithms.depth_first_search(stupid, pee, 3)
     
 
 
