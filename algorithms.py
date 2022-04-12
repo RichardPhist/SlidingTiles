@@ -12,17 +12,19 @@ def breadth_first_search(state: str, goal: str, gameSize: int):
     goalState = goal
 
     queue = [(initState, zeroInd, "")]
-    visited = {}
+    visited = []
 
-    #if visited.index(currState) != currState:
-        #expand
+    currState = queue.pop(0) #sets the current state as the initial state
+
+    if visited.index(currState) != currState:
+        
+        expand
         
 
 
 
 
-
-def expand(stateTuple: Tuple[str, int, str], size: int) -> List[Tuple[str, int, str]]:
+"""def expand(stateTuple: Tuple[str, int, str], size: int) -> List[Tuple[str, int, str]]:
     state, zeroInd, moves = stateTuple
 
     possMoves = ['l', 'u', 'r', 'd']
@@ -51,6 +53,7 @@ def expand(stateTuple: Tuple[str, int, str], size: int) -> List[Tuple[str, int, 
             newStateTuples.append((newState, newZeroInd, moves + move))
 
     return newStateTuples
+    """
 
 def out_of_place(state: str, goal: str) -> int:
     """
