@@ -1,3 +1,4 @@
+import math
 from queue import PriorityQueue
 from typing import List
 from typing import Tuple
@@ -48,7 +49,33 @@ def out_of_place(state: str, goal: str) -> int:
             numOutOfPlace += 1
     return numOutOfPlace
 
-def manhattan_distance(state: str, goal: str, size: int) -> int:
+def manhattan_distance(state: str, gameSize: int) -> int:
+    """
+    Manhattan distance heuristic
+    finds the total manhattan distanc of the game
+    """
     totalManDist = 0
+    for char in state:
+        if char != '0':
+            totalManDist += totalOffset(char, state.index(char), gameSize)
+    return int(totalManDist)
 
-    return totalManDist
+def totalOffset(tile, tileIndex, gameSize) -> int:
+    #calculates the total offset of a tile
+    return rowOffset(tile, tileIndex, gameSize) + colOffset(tile, tileIndex, gameSize)
+
+def rowOffset(tile, tileIndex, gameSize) -> int:
+    #calculates the row offset of a tile
+    return abs(conversion(tile) // gameSize - tileIndex // gameSize)
+
+def colOffset(tile, tileIndex, gameSize) -> int:
+    #calculates the column offset of a tile
+    return abs(conversion(tile) % gameSize - tileIndex % gameSize)
+
+def conversion(tile) -> int:
+    webster = {"A": 9, "B": 10, "C": 11,"D": 12, "E": 13, "F": 14}
+    retValue = webster.get(tile)
+    if not retValue:
+        return int(tile) - 1
+    else:
+        return retValue
