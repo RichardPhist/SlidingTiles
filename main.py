@@ -17,8 +17,8 @@ def main():
 
    # algorithms.breadth_first_search(problem1, goal, 3)
 
-    print(algorithms.out_of_place(problem1, goal))
-    (path, expanded) = algorithms.breadth_first_search(problem1, goal, 3)
+   # print(algorithms.out_of_place(problem1, goal))
+    (path, expanded) = algorithms.iter_deepening_A(problem1, goal, 3, 1)
     print(path, expanded)
 
     #print("{0}".format(algorithms.manhattan_distance(poo, math.sqrt(len(poo)))))
