@@ -18,7 +18,7 @@ def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int
     while len(queue) > 0:
         
         if numOfExpands > EXPAND_LIMIT:
-            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+            return ("Exceeded expansion limit:", numOfExpands)
 
         currState = queue.pop(0) #makes the current state of the game the state of the game that pops off the queue
         (currStringOfGame, indOfZero, moves) = currState 
@@ -35,7 +35,7 @@ def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int
                 #if the state is not visited already explore
                 visited[str(currStringOfGame)] = True
                 queue.append((''.join(currStringOfGame), indOfZero, moves))
-                #updates queue with tuple of string of game, index of 0, and moves taken
+                #inserts to back of queue with tuple of string of game, index of 0, and moves taken
 
     return ('FAILURE', numOfExpands)
 
@@ -52,7 +52,7 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
         if numOfExpands > EXPAND_LIMIT:
             return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
 
-        currState = queue.pop(-1) #makes the current state of the game the state of the game that pops off the queue
+        currState = queue.pop(-1) #makes the current state of the game the state of the game that pops off the stack
         (currStringOfGame, indOfZero, moves) = currState 
         #unpacks and assigns values to new tuple
 
@@ -65,9 +65,9 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
         for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
             if not visited.get(str(currStringOfGame)):
                 #if the state is not visited already explore
-                visited[str(currStringOfGame)] = True
+                visited[str(currStringOfGame)] = 2
                 queue.append((''.join(currStringOfGame), indOfZero, moves))
-                #updates queue with tuple of string of game, index of 0, and moves taken
+                #inserts to back of queue with tuple of string of game, index of 0, and moves taken
 
     return ('FAILURE', numOfExpands)
         
@@ -86,7 +86,7 @@ def expand(stateOfGame: Tuple[str, int, str], gameSize: int) -> List[Tuple[str, 
     for move in possMoves:
         (tempState, tempZeroInd) = gameinstance.doMoves(currState, [move], gameSize)
         retArray.append((tempState, tempZeroInd, listOfMoves + move))
-        print(tempState, tempZeroInd, move)
+        #print(tempState, tempZeroInd, move)
 
     return retArray
 
@@ -131,7 +131,6 @@ def conversion(tile) -> int:
     helper function for manhattan distance used to
     get goal index of a tile
     """
-
     #dictionary for characters and their indexes in 4x4 game
     webster = {"A": 9, "B": 10, "C": 11,"D": 12, "E": 13, "F": 14}
     retValue = webster.get(tile)
