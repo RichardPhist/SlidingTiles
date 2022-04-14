@@ -74,44 +74,44 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
 
 def iter_deepening_A(state: str, goal: str, gameSize: int, levelLimit: int) -> Tuple[str, int]: 
     numOfExpands = 0
-    initLevel = 0
+    currLevel = 0
     initState = state
     zeroInd = state.index('0')
-    initHeur = out_of_place(initState, goal)
 
     queue = PriorityQueue()
     tempQueue = PriorityQueue()
     visited = {} 
 
-    queue.put([initHeur, (initState, zeroInd, initLevel, "")])
+    queue.put([0, 0, currLevel, initState, zeroInd, ""])
     
-    while not queue.empty() and initLevel < levelLimit:
+    while not queue.empty() and currLevel < levelLimit:
 
         if numOfExpands > EXPAND_LIMIT:
             return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
 
         currState = queue.get()
-        [currHeur, (currStringOfGame, indOfZero, currLevel, moves)] = currState 
+        (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
 
         if currStringOfGame == goal:
             return(moves, numOfExpands)
 
-        if currLevel + 1 > levelLimit:
-            tempQueue.put([currLevel + out_of_place(currStringOfGame, goal), (currStringOfGame, indOfZero, currLevel, moves)])
-       
-        #x = currLevel + out_of_place(currState, goal)
-        #print(x)
-        #just checkin
-
-        numOfExpands +=1
-        #zero go u,d,l,r = children
-        for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
-            if not visited.get(str(currStringOfGame)):
-                #if the state is not visited already explore
+        #zero goes u,d,l,r = children
+        for child in expand((currStringOfGame, indOfZero, moves), gameSize):
+            if not visited.get(str(currStringOfGame)) and currLevel+1 < levelLimit:
                 visited[str(currStringOfGame)] = True
-                queue.append((''.join(currStringOfGame), indOfZero, moves))
-                #updates queue with tuple of string of game, index of 0, and moves taken
-   
+                childString, childIndOfZero, childMoves = child
+                heuristic = out_of_place(childString, goal)
+                queue.put([(currCost+1+heuristic), currCost+1, currLevel+1,
+                    childString, childIndOfZero, childMoves])
+            else:
+                tempQueue.put([(currCost+1+out_of_place(currStringOfGame, goal)), currCost+1, 0,
+                    childString, childIndOfZero, childMoves])
+
+        if tempQueue.empty():
+            queue = tempPQ  
+            tempPQ = PriorityQueue()  
+        
+        numOfExpands +=1
     return ('FAILURE', numOfExpands)
 
 
