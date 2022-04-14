@@ -70,6 +70,42 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
                 #inserts to back of queue with tuple of string of game, index of 0, and moves taken
 
     return ('FAILURE', numOfExpands)
+
+
+def iter_deepening_A(state: str, goal: str, gameSize: int, levelLimit: int) -> Tuple[str, int]: 
+    numOfExpands = 0
+    currLevel = 0
+    initState = state
+    zeroInd = state.index('0')
+    queue = PriorityQueue()
+    tempQueue = PriorityQueue()
+    visited = {} 
+    queue.put([0, 0, currLevel, initState, zeroInd, ""])
+
+    while not queue.empty() and currLevel < levelLimit:
+        if numOfExpands > EXPAND_LIMIT:
+            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+        currState = queue.get()
+        (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
+        if currStringOfGame == goal:
+            return(moves, numOfExpands)
+        #zero goes u,d,l,r = children
+        for child in expand((currStringOfGame, indOfZero, moves), gameSize):
+            if not visited.get(str(currStringOfGame)) and currLevel+1 < levelLimit:
+                visited[str(currStringOfGame)] = True
+                childString, childIndOfZero, childMoves = child
+                heuristic = out_of_place(childString, goal)
+                queue.put([(currCost+1+heuristic), currCost+1, currLevel+1,
+                    childString, childIndOfZero, childMoves])
+            else:
+                tempQueue.put([(currCost+1+out_of_place(currStringOfGame, goal)), currCost+1, 0,
+                    childString, childIndOfZero, childMoves])
+        if tempQueue.empty():
+            queue = tempPQ  
+            tempPQ = PriorityQueue()  
+
+        numOfExpands +=1
+    return ('FAILURE', numOfExpands)
         
 
 def expand(stateOfGame: Tuple[str, int, str], gameSize: int) -> List[Tuple[str, int, str]]:
