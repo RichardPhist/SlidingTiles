@@ -1,2 +1,0 @@
-Function, Initial state, Goal state, Solution, Expands, Result
-BFS,840156372,123456780,dllurdldrulurdrdlurulddr,129680,123456780

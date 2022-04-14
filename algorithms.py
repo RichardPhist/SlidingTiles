@@ -5,7 +5,7 @@ from typing import List
 from typing import Tuple
 from GameFrame import game
 
-EXPAND_LIMIT = 2000000
+EXPAND_LIMIT = 5000000
 gameinstance = game()
 
 def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
