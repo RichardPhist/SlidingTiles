@@ -6,7 +6,7 @@ from GameFrame import game
 
 def main():
 
-    algos = [algorithms.breadth_first_search]
+    algos = [algorithms.breadth_first_search, algorithms.depth_first_search]
     algorithm_names = {
         algorithms.breadth_first_search: "BFS",
         algorithms.depth_first_search: "DFS"
@@ -25,7 +25,7 @@ def main():
                     (moves_to_solve, num_expands)= func(line.strip("\n"), goal, int(math.sqrt(len(line.strip("\n")))))
 
                     (result_of_moves, zero_index) = game_to_solve.doMoves(line, moves_to_solve, int(math.sqrt(len(line.strip("\n")))))
-                    print("Now inserting into csv files\n")
+                    #print("Now inserting into csv files\n")
                     outfile_name = file_name.strip(".txt")
                     output_file = f"{algorithm_names[func]}{outfile_name}.csv"
                     with open(output_file, 'w', newline='') as csvfile:
