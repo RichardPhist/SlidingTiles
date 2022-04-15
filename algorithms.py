@@ -1,3 +1,4 @@
+from asyncio import queues
 import math
 from queue import PriorityQueue
 from typing import List
@@ -50,7 +51,7 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     while len(queue) > 0:
         
         if numOfExpands > EXPAND_LIMIT:
-            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+            return ("Exceeded expansion limit:", numOfExpands)
 
         currState = queue.pop(-1) #makes the current state of the game the state of the game that pops off the stack
         (currStringOfGame, indOfZero, moves) = currState 
@@ -71,16 +72,16 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
 
     return ('FAILURE', numOfExpands)
 
+
 def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]: 
-    levelLimit = 3
+    queue = PriorityQueue()
+    tempQueue = PriorityQueue()
+    visited = {}
+    levelLimit = 300
     numOfExpands = 0
     currLevel = 0
     initState = state
     zeroInd = state.index('0')
-
-    queue = PriorityQueue()
-    tempQueue = PriorityQueue()
-    visited = {}
 
     queue.put([0, 0, currLevel, initState, zeroInd, ""])
     
@@ -91,41 +92,33 @@ def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
 
         currState = queue.get()
         (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
-       # print(''.join(currStringOfGame), " cost: ", estCost, " ", moves)
         
-
-
         if ''.join(currStringOfGame) == goal:
-            return(moves, numOfExpands)
+            return(moves, numOfExpands, ''.join(currStringOfGame) )
 
         #zero goes u,d,l,r = children
         for child in expand((currStringOfGame, indOfZero, moves), gameSize):
             childString, childIndOfZero, childMoves = child
-           
+    
             if  not ''.join(childString) in visited and currLevel+1 < levelLimit :
                 visited[''.join(childString)] = 2
-                #print(visited.keys())
                 heuristic = out_of_place(childString, goal)
-                print("added to visited", ''.join(childString),"cost: ",  (currCost+1+heuristic)," ",childMoves)
-
                 #heuristic = manhattan_distance(childString, gameSize)
                 queue.put([(currCost+1+heuristic), currCost+1, currLevel+1,
                     childString, childIndOfZero, childMoves])
-            else:
-                tempQueue.put([(currCost+1+heuristic), currCost+1, 0,
+        
+        if currLevel+1 > levelLimit:
+             tempQueue.put([(currCost+1+heuristic), currCost+1, 0,
                     childString, childIndOfZero, childMoves])
-               
-
+                
         if queue.empty():
-            print("q is empty")
             queue = tempQueue  
             tempQueue = PriorityQueue()
         
         numOfExpands +=1
-    return ('FAILURE', numOfExpands)
 
-
-   
+    return ('FAILURE', numOfExpands, ''.join(currStringOfGame))
+        
 
 def expand(stateOfGame: Tuple[str, int, str], gameSize: int) -> List[Tuple[str, int, str]]:
     """
