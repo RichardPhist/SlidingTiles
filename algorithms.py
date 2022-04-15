@@ -8,6 +8,39 @@ from GameFrame import game
 EXPAND_LIMIT = 2000000
 gameinstance = game()
 
+def IterativeDeepeningDepthFirstSearch(state: str, goal: str, size: int) -> Tuple[str, int]:
+    numOfExpands = 0
+    expanded = {}
+    StartState = list(state)
+    Solution = list(goal)
+    indexO = StartState.index('0')
+    limit = 4
+    stack = [[indexO, "", StartState, 0]]
+
+    while len(stack) > 0:
+        if numOfExpands > EXPAND_LIMIT:
+            return("Is too thicc:" + numOfExpands)
+
+        Odex, moves, position, d = stack.pop()
+
+        if ''.join(position) in expanded:
+            continue
+        expanded[''.join(position)] = 1
+
+        if position == Solution:
+            return(moves, numOfExpands)
+
+        for nextState in expand((position, Odex,moves)):
+            if d + 1 < limit:
+                nextState = [d + 1] + list(nextState)
+                stack = stack + [nextState]
+
+        numOfExpands = numOfExpands + 1
+        
+    
+    
+    
+
 def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     numOfExpands = 0
     initState = state

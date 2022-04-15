@@ -7,11 +7,12 @@ from GameFrame import game
 
 def main():
 
-    algos = [algorithms.breadth_first_search]
+    algos = [algorithms.IterativeDeepeningDepthFirstSearch]
     algorithm_names = {
         algorithms.breadth_first_search: "BFS",
         algorithms.depth_first_search: "DFS",
-        algorithms.iter_deepening_A: "Iter_Deep_A"
+        algorithms.iter_deepening_A: "Iter_Deep_A",
+        algorithms.IterativeDeepeningDepthFirstSearch: "IDDFS"
     }
 
     f = NULL
@@ -55,9 +56,9 @@ def make_write_string(algo_name, init_state, goal_state, solution, expands, resu
 
 #helper function that writes to output file
 def write_to_output(output_file ,output_string):
-    with open(output_file, 'w') as csvfile:
-        csvfile.write("Function, Initial state, Goal state, Solution, Expands, Result\n")
+    with open(output_file, 'a') as csvfile:
         csvfile.write(output_string)
+        csvfile.close()
     #test.doMoves(poo, "dd", 3)
     #test.print_puzzle(poo, 3)
 
