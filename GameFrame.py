@@ -53,11 +53,6 @@ class game:
         if zeroInd < 0:
             zeroInd = retState.index('0')
         for move in moveList:
-
-            #cls.print_puzzle(state, size)
-            #print()
-            #print(move)
-
             if move == 'l':
                 retState, zeroInd = cls.left(retState, zeroInd, size)
                 
@@ -69,15 +64,5 @@ class game:
                 
             elif move == 'u':
                 retState, zeroInd = cls.up(retState, zeroInd, size)
-                
-
-        #cls.print_puzzle(state, size)
         
         return (retState, zeroInd)
-
-    def print_puzzle(cls, puzzle: List[str], size: int):
-        #helper function prints out state of the game
-        for i, tile in enumerate(puzzle):
-            print(tile, end=' ')
-            if (i - size + 1) % size == 0:
-                print('')

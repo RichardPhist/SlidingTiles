@@ -1,10 +1,11 @@
+from asyncio import queues
 import math
 from queue import PriorityQueue
 from typing import List
 from typing import Tuple
 from GameFrame import game
 
-EXPAND_LIMIT = 2000000
+EXPAND_LIMIT = 5000000
 gameinstance = game()
 
 def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
@@ -18,7 +19,7 @@ def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int
     while len(queue) > 0:
         
         if numOfExpands > EXPAND_LIMIT:
-            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+            return ("Exceeded expansion limit:", numOfExpands)
 
         currState = queue.pop(0) #makes the current state of the game the state of the game that pops off the queue
         (currStringOfGame, indOfZero, moves) = currState 
@@ -35,7 +36,7 @@ def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int
                 #if the state is not visited already explore
                 visited[str(currStringOfGame)] = True
                 queue.append((''.join(currStringOfGame), indOfZero, moves))
-                #updates queue with tuple of string of game, index of 0, and moves taken
+                #inserts to back of queue with tuple of string of game, index of 0, and moves taken
 
     return ('FAILURE', numOfExpands)
 
@@ -50,9 +51,9 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     while len(queue) > 0:
         
         if numOfExpands > EXPAND_LIMIT:
-            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+            return ("Exceeded expansion limit:", numOfExpands)
 
-        currState = queue.pop(-1) #makes the current state of the game the state of the game that pops off the queue
+        currState = queue.pop(-1) #makes the current state of the game the state of the game that pops off the stack
         (currStringOfGame, indOfZero, moves) = currState 
         #unpacks and assigns values to new tuple
 
@@ -65,10 +66,48 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
         for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
             if not visited.get(str(currStringOfGame)):
                 #if the state is not visited already explore
-                visited[str(currStringOfGame)] = True
+                visited[str(currStringOfGame)] = 2
                 queue.append((''.join(currStringOfGame), indOfZero, moves))
-                #updates queue with tuple of string of game, index of 0, and moves taken
+                #inserts to back of queue with tuple of string of game, index of 0, and moves taken
 
+    return ('FAILURE', numOfExpands)
+
+
+def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]: 
+    levelLimit = 5
+    numOfExpands = 0
+    currLevel = 0
+    initState = state
+    zeroInd = state.index('0')
+    queue = PriorityQueue()
+    tempQueue = PriorityQueue()
+    visited = {} 
+    queue.put([0, 0, currLevel, initState, zeroInd, ""])
+
+    while not queue.empty():
+        if numOfExpands > EXPAND_LIMIT:
+            return ("Exceeded expansion limit:", numOfExpands)
+        currState = queue.get()
+        (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
+        if currStringOfGame == goal:
+            return(moves, numOfExpands)
+        #zero goes u,d,l,r = children
+        for child in expand((currStringOfGame, indOfZero, moves), gameSize):
+            if not visited.get(str(currStringOfGame)) and currLevel+1 < levelLimit:
+                visited[''.join(currStringOfGame)] = 2
+                childString, childIndOfZero, childMoves = child
+                heuristic = out_of_place(childString, goal)
+                #heuristic = manhattan_distance(childString, goal)
+                queue.put([(currCost+1+heuristic), currCost+1, currLevel+1,
+                    childString, childIndOfZero, childMoves])
+            else:
+                tempQueue.put([(currCost+1+out_of_place(currStringOfGame, goal)), currCost+1, 0,
+                    childString, childIndOfZero, childMoves])
+        if tempQueue.empty():
+            queue = tempQueue  
+            tempQueue = PriorityQueue()  
+
+        numOfExpands +=1
     return ('FAILURE', numOfExpands)
 
 
@@ -179,7 +218,6 @@ def conversion(tile) -> int:
     helper function for manhattan distance used to
     get goal index of a tile
     """
-
     #dictionary for characters and their indexes in 4x4 game
     webster = {"A": 9, "B": 10, "C": 11,"D": 12, "E": 13, "F": 14}
     retValue = webster.get(tile)
