@@ -51,8 +51,8 @@ def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     
     totalCost = 0 
 
-    # Queue consists of initial state, index of 0, string of moves, and total cost
-    queue.put([(totalCost, initState, zeroInd, "")])
+    # Queue consists of total cost, initial state, index of 0, and string of moves
+    queue.put([totalCost, initState, zeroInd, ""])
 
     while not queue.empty():
 
@@ -60,16 +60,16 @@ def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
             return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
 
         currState = queue.get() # the current state is the lowest totalCost
-        print(currState)
         (totalCost, currStringOfGame, indOfZero, moves) = currState #unpacks and assigns values to new tuple
 
+        print(currStringOfGame)
         if currStringOfGame == goal:
             #once goal state is found return the moves and num of expands to get there
             return(moves, numOfExpands)
         
         numOfExpands += 1 
 
-        for (cost, currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
+        for (currStringOfGame, indOfZero, moves) in expand((currStringOfGame, indOfZero, moves), gameSize):
             if not visited.get(str(currStringOfGame)):
 
                 #if the state is not visited already explore
@@ -80,7 +80,7 @@ def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
 
                 totalCost = heuristic + 1
 
-                queue.put(totalCost, (''.join(currStringOfGame), indOfZero, moves))
+                queue.put([totalCost,''.join(currStringOfGame), indOfZero, moves])
                 #inserts to back of queue with tuple of string of game, index of 0, and moves taken
 
     return ('FAILURE', numOfExpands)  

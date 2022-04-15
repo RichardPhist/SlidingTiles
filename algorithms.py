@@ -4,8 +4,6 @@ from typing import List
 from typing import Tuple
 from GameFrame import game
 
-#Testing change 
-
 EXPAND_LIMIT = 2000000
 gameinstance = game()
 
