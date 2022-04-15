@@ -8,39 +8,6 @@ from GameFrame import game
 EXPAND_LIMIT = 2000000
 gameinstance = game()
 
-def test() -> str:
-    numOfExpands = 0
-    initState = "123456780"
-    zeroInd = initState.index('0')
-
-    queue = PriorityQueue()
-    visited = {} # dictionary
-
-    # h1: out of place - out_of_place(state: str, goal: str)
-    # h2: sum of distance of each tile from goal position - manhattan_distance(state: str, gameSize: int)
-    
-    cost = 0  
-    heuristic = manhattan_distance(initState, 3)
-    print(heuristic)
-    #heuristic = out_of_place(state, gameSize)
-    totalCost = cost + heuristic 
-
-    # Queue consists of initial state, index of 0, string of moves, and total cost
-    queue.put([(5, 345612789, 0, "", 12)])
-    queue.put([(2, 123456789, 1, "", 7)])    
-    queue.put([(1, 123456789, 2, "", 15)])
-    queue.put([(3, 523456780, 3, "", 11)])
-    queue.put([(4, 212345678, 4, "", 8)])
-
-    print(queue.get())
-    print(queue.get())
-    print(queue.get())
-    print(queue.get())
-
-    
-
-
-
 def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     numOfExpands = 0
     initState = state
@@ -84,19 +51,6 @@ def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
                 #inserts to back of queue with tuple of string of game, index of 0, and moves taken
 
     return ('FAILURE', numOfExpands)  
-
-
-
-
-
-
-
-
-
-
-
-
-        
 
 def expand(stateOfGame: Tuple[str, int, str], gameSize: int) -> List[Tuple[str, int, str]]:
     """
