@@ -72,42 +72,50 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
 
     return ('FAILURE', numOfExpands)
 
-
 def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]: 
-    levelLimit = 5
+    queue = PriorityQueue()
+    tempQueue = PriorityQueue()
+    visited = {}
+    levelLimit = 300
     numOfExpands = 0
     currLevel = 0
     initState = state
     zeroInd = state.index('0')
-    queue = PriorityQueue()
-    tempQueue = PriorityQueue()
-    visited = {} 
-    queue.put([0, 0, currLevel, initState, zeroInd, ""])
 
-    while not queue.empty():
+    queue.put([0, 0, currLevel, initState, zeroInd, ""])
+    
+    while not queue.empty() and currLevel < levelLimit:
+
         if numOfExpands > EXPAND_LIMIT:
-            return ("Exceeded expansion limit:", numOfExpands)
+            return (f'Exceeded expansion limit: ', numOfExpands)
+
         currState = queue.get()
         (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
-        if currStringOfGame == goal:
+        
+        if ''.join(currStringOfGame) == goal:
             return(moves, numOfExpands)
+
         #zero goes u,d,l,r = children
         for child in expand((currStringOfGame, indOfZero, moves), gameSize):
-            if not visited.get(str(currStringOfGame)) and currLevel+1 < levelLimit:
-                visited[''.join(currStringOfGame)] = 2
-                childString, childIndOfZero, childMoves = child
-                heuristic = out_of_place(childString, goal)
-                #heuristic = manhattan_distance(childString, goal)
+            childString, childIndOfZero, childMoves = child
+    
+            if  not ''.join(childString) in visited and currLevel+1 < levelLimit :
+                visited[''.join(childString)] = 2
+                #heuristic = out_of_place(childString, goal)
+                heuristic = manhattan_distance(childString, gameSize)
                 queue.put([(currCost+1+heuristic), currCost+1, currLevel+1,
                     childString, childIndOfZero, childMoves])
-            else:
-                tempQueue.put([(currCost+1+out_of_place(currStringOfGame, goal)), currCost+1, 0,
+        
+        if currLevel+1 > levelLimit:
+             tempQueue.put([(currCost+1+heuristic), currCost+1, 0,
                     childString, childIndOfZero, childMoves])
-        if tempQueue.empty():
+                
+        if queue.empty():
             queue = tempQueue  
-            tempQueue = PriorityQueue()  
-
+            tempQueue = PriorityQueue()
+        
         numOfExpands +=1
+
     return ('FAILURE', numOfExpands)
         
 
