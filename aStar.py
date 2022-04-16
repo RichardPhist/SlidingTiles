@@ -29,7 +29,7 @@ def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
         currState = queue.get() # the current state is the lowest totalCost
         (totalCost, currStringOfGame, indOfZero, moves) = currState #unpacks and assigns values to new tuple
 
-        print(currStringOfGame)
+
         if currStringOfGame == goal:
             #once goal state is found return the moves and num of expands to get there
             return(moves, numOfExpands)
