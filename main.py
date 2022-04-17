@@ -1,13 +1,12 @@
 from asyncio.windows_events import NULL
-import csv
 import algorithms
 import os
 import math
 from GameFrame import game
-import datetime
 
 def main():
 
+<<<<<<< HEAD
     algos = [algorithms.IterativeDeepeningDepthFirstSearch]
     algorithm_names = {
         algorithms.breadth_first_search: "BFS",
@@ -15,6 +14,13 @@ def main():
         algorithms.iter_deepening_A: "Iter_Deep_A",
         algorithms.IterativeDeepeningDepthFirstSearch: "IDDFS"
 
+=======
+    algos = [algorithms.iter_deepening_A]
+    algorithm_names = {
+        algorithms.breadth_first_search: "BFS",
+        algorithms.depth_first_search: "DFS",
+        algorithms.iter_deepening_A: "Iter_Deep_A"
+>>>>>>> 388e201079982f241db0c482506b25d066d787e7
     }
 
     f = NULL
@@ -28,9 +34,6 @@ def main():
                 f_lines = f.readlines()
                 goal = f_lines[0].strip("\n")
                 for line in f_lines[1:]:
-                    if line == "":
-                        print("End of File")
-                        return
                     #calls the algorithm to solve the game
                     (moves_to_solve, num_expands)= func(line.strip("\n"), goal, int(math.sqrt(len(line.strip("\n")))))
                     #calls doMoves to perform the solution found by the algorithm
@@ -53,18 +56,6 @@ def main():
                     write_to_output(output_file, true_output)
                 f.close()
                 
-#test = game()
-#test.doMoves(poo, "dd", 3)
-#test.print_puzzle(poo, 3
-#algorithms.breadth_first_search(poo, pee, 3
-#print(algorithms.out_of_place(poo, pee))
-#print("{0}".format(algorithms.manhattan_distance(poo, math.sqrt(len(poo)))))
-#print(algorithms.breadth_first_search("16235A749C08DEBF", "123456789ABCDEF0", 4))
-#print(algorithms.breadth_first_search("0634217859ABDEFC", "123456789ABCDEF0", 4))
-#print(algorithms.depth_first_search(poo, pee, 3))
-#(path, expanded) = algorithms.iter_deepening_A("160273485", "123456780", 3)
-#print(path, expanded)
-
 #helper function creates string to write to output file
 def make_write_string(algo_name, init_state, goal_state, solution, expands, result) -> str:
     output_string = ""
