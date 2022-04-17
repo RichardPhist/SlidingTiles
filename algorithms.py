@@ -126,6 +126,7 @@ def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
         if numOfExpands > EXPAND_LIMIT:
             return (f'Exceeded expansion limit: ', numOfExpands)
 
+
         currState = queue.get()
         (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
         
@@ -191,6 +192,7 @@ def manhattan_distance(state: str, gameSize: int) -> int:
     """
     Manhattan distance heuristic
     finds the total manhattan distanc of the game
+    running sum of total offsets of chars and indexes
     """
     totalManDist = 0
     for char in state:
