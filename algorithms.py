@@ -72,7 +72,6 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
 
     return ('FAILURE', numOfExpands)
 
-
 def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]: 
     queue = PriorityQueue()
     tempQueue = PriorityQueue()
@@ -88,13 +87,14 @@ def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     while not queue.empty() and currLevel < levelLimit:
 
         if numOfExpands > EXPAND_LIMIT:
-            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+            return (f'Exceeded expansion limit: ', numOfExpands)
+
 
         currState = queue.get()
         (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
         
         if ''.join(currStringOfGame) == goal:
-            return(moves, numOfExpands )
+            return(moves, numOfExpands)
 
         #zero goes u,d,l,r = children
         for child in expand((currStringOfGame, indOfZero, moves), gameSize):
