@@ -14,7 +14,7 @@ def IterativeDeepeningDepthFirstSearch(state: str, goal: str, size: int) -> Tupl
     StartState = list(state)
     Solution = list(goal)
     indexO = StartState.index('0')
-    limit = 12
+    limit = 2
     stack = [[0, StartState, indexO, ""]]
 
     while len(stack) > 0: #check if stack is empty
