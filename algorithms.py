@@ -5,37 +5,41 @@ from typing import List
 from typing import Tuple
 from GameFrame import game
 
-EXPAND_LIMIT = 2000000
+EXPAND_LIMIT = 5000000
 gameinstance = game()
 
 def IterativeDeepeningDepthFirstSearch(state: str, goal: str, size: int) -> Tuple[str, int]:
-    numOfExpands = 0
+    numOfExpands = 0 #initializing values and the stack
     expanded = {}
     StartState = list(state)
     Solution = list(goal)
     indexO = StartState.index('0')
-    limit = 4
-    stack = [[indexO, "", StartState, 0]]
+    limit = 12
+    stack = [[0, StartState, indexO, ""]]
 
-    while len(stack) > 0:
-        if numOfExpands > EXPAND_LIMIT:
+    while len(stack) > 0: #check if stack is empty
+        if numOfExpands > EXPAND_LIMIT: #if expands pass the limit stops
             return("Is too thicc:" + numOfExpands)
 
-        Odex, moves, position, d = stack.pop()
+        d, position, Odex, moves = stack.pop() # depth/position of puzzle/ index of 0 / the moves to take 
 
         if ''.join(position) in expanded:
             continue
         expanded[''.join(position)] = 1
 
-        if position == Solution:
+        if position == Solution: #Checks if solution is found
             return(moves, numOfExpands)
 
-        for nextState in expand((position, Odex,moves)):
+        for nextState in expand((position, Odex,moves), size): #checks all other states from pop stack
             if d + 1 < limit:
                 nextState = [d + 1] + list(nextState)
                 stack = stack + [nextState]
+            else:
+                nextState = [0] + list(nextState)
+                stack = [nextState] + stack
 
         numOfExpands = numOfExpands + 1
+        
         
     
     
