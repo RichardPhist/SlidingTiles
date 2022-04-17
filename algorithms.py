@@ -94,7 +94,7 @@ def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
         (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
         
         if ''.join(currStringOfGame) == goal:
-            return(moves, numOfExpands, ''.join(currStringOfGame) )
+            return(moves, numOfExpands )
 
         #zero goes u,d,l,r = children
         for child in expand((currStringOfGame, indOfZero, moves), gameSize):
@@ -102,8 +102,8 @@ def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     
             if  not ''.join(childString) in visited and currLevel+1 < levelLimit :
                 visited[''.join(childString)] = 2
-                heuristic = out_of_place(childString, goal)
-                #heuristic = manhattan_distance(childString, gameSize)
+                #heuristic = out_of_place(childString, goal)
+                heuristic = manhattan_distance(childString, gameSize)
                 queue.put([(currCost+1+heuristic), currCost+1, currLevel+1,
                     childString, childIndOfZero, childMoves])
         
@@ -117,7 +117,7 @@ def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
         
         numOfExpands +=1
 
-    return ('FAILURE', numOfExpands, ''.join(currStringOfGame))
+    return ('FAILURE', numOfExpands)
         
 
 def expand(stateOfGame: Tuple[str, int, str], gameSize: int) -> List[Tuple[str, int, str]]:
