@@ -1,16 +1,7 @@
 from typing import Tuple
 from typing import List
 
-class game:
-    #helper function that swaps 0 tile
-    def swap(cls, state, x: int, y: int,):
-        #swaps location of tiles
-        temp = state[x]
-        state[x] = state[y]
-        state[y] = temp
-        return state
-
-    def valid_moves(cls, zeroInd, gameSize, move):
+def validMoves(zeroInd, gameSize, move):
         if move == 'l':
             if zeroInd % gameSize == 0:
                 return False
@@ -18,46 +9,55 @@ class game:
             if zeroInd % gameSize == gameSize - 1:
                 return False
         elif move == 'u':
-            if zeroInd % gameSize == gameSize - 1:
+            if zeroInd < gameSize:
                 return False
         elif move == 'd':
             if zeroInd >= gameSize * (gameSize - 1):
                 return False
-    def left(cls, posistion, zeroInd, gameSize):
+
+class game:
+    def left(cls, position, zeroInd, gameSize):
         #moves the 0 tile to the left
-        if game.valid_moves(cls, zeroInd, gameSize, 'l') == False:
-            return (posistion, zeroInd)
-        
-        posistion = cls.swap(posistion, zeroInd, zeroInd - 1)
+        if validMoves(zeroInd,gameSize,'l') is False:
+            return (position,zeroInd)
+        position = cls.swap(position, zeroInd, zeroInd - 1)
         zeroInd = zeroInd - 1
-        return (posistion, zeroInd)
+        return (position, zeroInd)
 
-    def right(cls, posistion, zeroInd: int, gameSize: int):
+    def right(cls, position, zeroInd: int, gameSize: int):
         #moves the 0 tile to the right
-        if game.valid_moves(cls, zeroInd, gameSize, 'r') == False:
-            return (posistion, zeroInd)
+        if validMoves(zeroInd,gameSize,'r') is False:
+            return (position,zeroInd)
 
-        posistion = cls.swap(posistion, zeroInd, zeroInd + 1)
+        position = cls.swap(position, zeroInd, zeroInd + 1)
         zeroInd = zeroInd + 1
-        return (posistion, zeroInd)
+        return (position, zeroInd)
     
-    def up(cls, posistion, zeroInd, gameSize: int):
+    def up(cls, position, zeroInd, gameSize: int):
         #moves the 0 tile up
-        if game.valid_moves(cls, zeroInd, gameSize, 'u') == False:
-            return (posistion, zeroInd)
+        if validMoves(zeroInd,gameSize,'u') is False:
+            return (position,zeroInd)
         
-        posistion = cls.swap(posistion, zeroInd, zeroInd - gameSize)
+        position = cls.swap(position, zeroInd, zeroInd - gameSize)
         zeroInd = zeroInd - gameSize
-        return (posistion, zeroInd)
+        return (position, zeroInd)
 
-    def down(cls, posistion, zeroInd, gameSize):
+    def down(cls, position, zeroInd, gameSize):
         #moves the 0 tile down
-        if game.valid_moves(cls, zeroInd, gameSize, 'd') == False:
-            return (posistion, zeroInd)
+        if validMoves(zeroInd,gameSize,'d') is False:
+            return (position,zeroInd)
         
-        posistion = cls.swap(posistion, zeroInd, zeroInd +gameSize)
+        position = cls.swap(position, zeroInd, zeroInd +gameSize)
         zeroInd = zeroInd + gameSize
-        return (posistion, zeroInd)
+        return (position, zeroInd)
+
+    #helper function that swaps 0 tile
+    def swap(cls, state, x: int, y: int,):
+        #swaps location of tiles
+        temp = state[x]
+        state[x] = state[y]
+        state[y] = temp
+        return state
 
     def doMoves(cls, state: str, moveList: str, size: int, zeroInd: int = -1) -> Tuple[List[str], int]:
         #function that calls other move functions

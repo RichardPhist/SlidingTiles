@@ -3,7 +3,6 @@ import algorithms
 import os
 import math
 from GameFrame import game
-from algorithms import a_star_search
 
 def main():
 
