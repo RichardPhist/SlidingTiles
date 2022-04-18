@@ -8,84 +8,6 @@ from GameFrame import game
 EXPAND_LIMIT = 5000000
 gameinstance = game()
 
-def IterativeDeepeningDepthFirstSearch(state: str, goal: str, size: int) -> Tuple[str, int]:
-    numOfExpands = 0 #initializing values and the stack
-    expanded = {}
-    StartState = list(state)
-    Solution = list(goal)
-    indexO = StartState.index('0')
-    limit = 2
-    stack = [[0, StartState, indexO, ""]]
-
-    while len(stack) > 0: #check if stack is empty
-        if numOfExpands > EXPAND_LIMIT: #if expands pass the limit stops
-            return("Is too thicc:" + numOfExpands)
-
-        d, position, Odex, moves = stack.pop() # depth/position of puzzle/ index of 0 / the moves to take 
-
-        if ''.join(position) in expanded:
-            continue
-        expanded[''.join(position)] = 1
-
-        if position == Solution: #Checks if solution is found
-            return(moves, numOfExpands)
-
-        for nextState in expand((position, Odex,moves), size): #checks all other states from pop stack
-            if d + 1 < limit:
-                nextState = [d + 1] + list(nextState)
-                stack = stack + [nextState]
-            else:
-                nextState = [0] + list(nextState)
-                stack = [nextState] + stack
-
-        numOfExpands = numOfExpands + 1     
-
-def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
-    numOfExpands = 0
-    initState = state
-    zeroInd = state.index('0')
-
-    queue = PriorityQueue()
-    visited = {} # dictionary
-    
-    #totalCost = manhattan_distance(initState, gameSize)
-    totalCost = out_of_place(initState, goal)
-
-    # Queue consists of total cost, initial state, index of 0, and string of moves
-    queue.put([totalCost, initState, zeroInd, ""])
-
-    while not queue.empty():
-
-        if numOfExpands > EXPAND_LIMIT:
-            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
-
-        currState = queue.get() # the current state is the lowest totalCost
-        (totalCost, currStringOfGame, indOfZero, moves) = currState #unpacks and assigns values to new tuple
-
-        if currStringOfGame == goal:
-            #once goal state is found return the moves and num of expands to get there
-            return(moves, numOfExpands)
-
-        for child in expand((currStringOfGame, indOfZero, moves), gameSize):
-            childString, childIndOfZero, childMoves = child
-
-            #print(str(currStringOfGame))
-            if not visited.get(str(childString)):
-                #if the state is not visited already explore
-                visited[str(childString)] = True
-
-                #heuristic = manhattan_distance(childString, gameSize)
-                heuristic = out_of_place(childString, goal)
-
-                totalCost = heuristic + 1
-
-                queue.put([totalCost,''.join(childString), childIndOfZero, childMoves])
-                #inserts to queue with tuple of string of game, index of 0, and moves taken
-
-                numOfExpands += 1
-
-    return ('FAILURE', numOfExpands)  
-
 def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     numOfExpands = 0
     initState = state
@@ -181,6 +103,84 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
                 #inserts to back of queue with tuple of string of game, index of 0, and moves taken
 
     return ('FAILURE', numOfExpands)
+
+def IterativeDeepeningDepthFirstSearch(state: str, goal: str, size: int) -> Tuple[str, int]:
+    numOfExpands = 0 #initializing values and the stack
+    expanded = {}
+    StartState = list(state)
+    Solution = list(goal)
+    indexO = StartState.index('0')
+    limit = 2
+    stack = [[0, StartState, indexO, ""]]
+
+    while len(stack) > 0: #check if stack is empty
+        if numOfExpands > EXPAND_LIMIT: #if expands pass the limit stops
+            return("Is too thicc:" + numOfExpands)
+
+        d, position, Odex, moves = stack.pop() # depth/position of puzzle/ index of 0 / the moves to take 
+
+        if ''.join(position) in expanded:
+            continue
+        expanded[''.join(position)] = 1
+
+        if position == Solution: #Checks if solution is found
+            return(moves, numOfExpands)
+
+        for nextState in expand((position, Odex,moves), size): #checks all other states from pop stack
+            if d + 1 < limit:
+                nextState = [d + 1] + list(nextState)
+                stack = stack + [nextState]
+            else:
+                nextState = [0] + list(nextState)
+                stack = [nextState] + stack
+
+        numOfExpands = numOfExpands + 1     
+
+def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
+    numOfExpands = 0
+    initState = state
+    zeroInd = state.index('0')
+
+    queue = PriorityQueue()
+    visited = {} # dictionary
+    
+    #totalCost = manhattan_distance(initState, gameSize)
+    totalCost = out_of_place(initState, goal)
+
+    # Queue consists of total cost, initial state, index of 0, and string of moves
+    queue.put([totalCost, initState, zeroInd, ""])
+
+    while not queue.empty():
+
+        if numOfExpands > EXPAND_LIMIT:
+            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+
+        currState = queue.get() # the current state is the lowest totalCost
+        (totalCost, currStringOfGame, indOfZero, moves) = currState #unpacks and assigns values to new tuple
+
+        if currStringOfGame == goal:
+            #once goal state is found return the moves and num of expands to get there
+            return(moves, numOfExpands)
+
+        for child in expand((currStringOfGame, indOfZero, moves), gameSize):
+            childString, childIndOfZero, childMoves = child
+
+            #print(str(currStringOfGame))
+            if not visited.get(str(childString)):
+                #if the state is not visited already explore
+                visited[str(childString)] = True
+
+                #heuristic = manhattan_distance(childString, gameSize)
+                heuristic = out_of_place(childString, goal)
+
+                totalCost = heuristic + 1
+
+                queue.put([totalCost,''.join(childString), childIndOfZero, childMoves])
+                #inserts to queue with tuple of string of game, index of 0, and moves taken
+
+                numOfExpands += 1
+
+    return ('FAILURE', numOfExpands)  
 
 def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]: 
     queue = PriorityQueue()

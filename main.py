@@ -6,15 +6,21 @@ from GameFrame import game
 from algorithms import a_star_search
 
 def main():
-    (p,e) = a_star_search("120345678", "125340678",3)
-    print((p,e))
 
-    algos = [algorithms.iter_deepening_A, algorithms.breadth_first_search,algorithms.depth_first_search,algorithms.IterativeDeepeningDepthFirstSearch]
-    algorithm_names = {
+    algos = [
+        algorithms.breadth_first_search, #BFS
+        algorithms.depth_first_search, #DFS
+        algorithms.IterativeDeepeningDepthFirstSearch, #Iterative Deep
+         algorithms.a_star_search, #A star
+        algorithms.iter_deepening_A #Iterative Deep A Star
+        ]
+
+    algorithm_names = { #hashtable to get algorithm names
         algorithms.breadth_first_search: "BFS",
         algorithms.depth_first_search: "DFS",
+        algorithms.IterativeDeepeningDepthFirstSearch: "IDDFS",
+        algorithms.a_star_search: "A Star",
         algorithms.iter_deepening_A: "Iter_Deep_A",
-        algorithms.IterativeDeepeningDepthFirstSearch: "IDDFS"
     }
 
     f = NULL
