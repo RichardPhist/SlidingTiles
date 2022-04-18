@@ -3,14 +3,18 @@ import algorithms
 import os
 import math
 from GameFrame import game
+from algorithms import a_star_search
 
 def main():
+    (p,e) = a_star_search("120345678", "125340678",3)
+    print((p,e))
 
-    algos = [algorithms.iter_deepening_A]
+    algos = [algorithms.a_star_search]
     algorithm_names = {
         algorithms.breadth_first_search: "BFS",
         algorithms.depth_first_search: "DFS",
-        algorithms.iter_deepening_A: "Iter_Deep_A"
+        algorithms.iter_deepening_A: "Iter_Deep_A",
+        algorithms.a_star_search: "A_Star_search"
     }
 
     f = NULL

@@ -8,6 +8,57 @@ from GameFrame import game
 EXPAND_LIMIT = 5000000
 gameinstance = game()
 
+
+def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
+    numOfExpands = 0
+    initState = state
+    zeroInd = state.index('0')
+
+    queue = PriorityQueue()
+    visited = {} # dictionary
+    
+    #totalCost = manhattan_distance(initState, gameSize)
+    totalCost = out_of_place(initState, goal)
+
+    # Queue consists of total cost, initial state, index of 0, and string of moves
+    queue.put([totalCost, initState, zeroInd, ""])
+
+    while not queue.empty():
+
+        if numOfExpands > EXPAND_LIMIT:
+            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+
+        currState = queue.get() # the current state is the lowest totalCost
+        (totalCost, currStringOfGame, indOfZero, moves) = currState #unpacks and assigns values to new tuple
+        print("in while loop, current string cost is",totalCost, "for", currStringOfGame, "moves are", moves)
+
+        if currStringOfGame == goal:
+            #once goal state is found return the moves and num of expands to get there
+            return(moves, numOfExpands)
+
+        print("expanding on", currStringOfGame, "of cost", totalCost)
+
+        for child in expand((currStringOfGame, indOfZero, moves), gameSize):
+            childString, childIndOfZero, childMoves = child
+
+            #print(str(currStringOfGame))
+            if not visited.get(str(childString)):
+                #if the state is not visited already explore
+                visited[str(childString)] = True
+
+                #heuristic = manhattan_distance(childString, gameSize)
+                heuristic = out_of_place(childString, goal)
+
+                totalCost = heuristic + 1
+
+                queue.put([totalCost,''.join(childString), childIndOfZero, childMoves])
+                #inserts to queue with tuple of string of game, index of 0, and moves taken
+
+                print("cost: ", totalCost, "string:" ,childString, "moves: ", childMoves, "expand count:", numOfExpands)
+                numOfExpands += 1
+
+    return ('FAILURE', numOfExpands)  
+
 def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     numOfExpands = 0
     initState = state
@@ -133,7 +184,7 @@ def expand(stateOfGame: Tuple[str, int, str], gameSize: int) -> List[Tuple[str, 
     for move in possMoves:
         (tempState, tempZeroInd) = gameinstance.doMoves(currState, [move], gameSize)
         retArray.append((tempState, tempZeroInd, listOfMoves + move))
-        #print(tempState, tempZeroInd, move)
+       # print(tempState, tempZeroInd, move)
 
     return retArray
 
