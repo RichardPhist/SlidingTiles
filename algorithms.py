@@ -8,6 +8,37 @@ from GameFrame import game
 EXPAND_LIMIT = 5000000
 gameinstance = game()
 
+def IterativeDeepeningDepthFirstSearch(state: str, goal: str, size: int) -> Tuple[str, int]:
+    numOfExpands = 0 #initializing values and the stack
+    expanded = {}
+    StartState = list(state)
+    Solution = list(goal)
+    indexO = StartState.index('0')
+    limit = 2
+    stack = [[0, StartState, indexO, ""]]
+
+    while len(stack) > 0: #check if stack is empty
+        if numOfExpands > EXPAND_LIMIT: #if expands pass the limit stops
+            return("Is too thicc:" + numOfExpands)
+
+        d, position, Odex, moves = stack.pop() # depth/position of puzzle/ index of 0 / the moves to take 
+
+        if ''.join(position) in expanded:
+            continue
+        expanded[''.join(position)] = 1
+
+        if position == Solution: #Checks if solution is found
+            return(moves, numOfExpands)
+
+        for nextState in expand((position, Odex,moves), size): #checks all other states from pop stack
+            if d + 1 < limit:
+                nextState = [d + 1] + list(nextState)
+                stack = stack + [nextState]
+            else:
+                nextState = [0] + list(nextState)
+                stack = [nextState] + stack
+
+        numOfExpands = numOfExpands + 1     
 
 def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     numOfExpands = 0
@@ -30,13 +61,10 @@ def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
 
         currState = queue.get() # the current state is the lowest totalCost
         (totalCost, currStringOfGame, indOfZero, moves) = currState #unpacks and assigns values to new tuple
-        print("in while loop, current string cost is",totalCost, "for", currStringOfGame, "moves are", moves)
 
         if currStringOfGame == goal:
             #once goal state is found return the moves and num of expands to get there
             return(moves, numOfExpands)
-
-        print("expanding on", currStringOfGame, "of cost", totalCost)
 
         for child in expand((currStringOfGame, indOfZero, moves), gameSize):
             childString, childIndOfZero, childMoves = child
@@ -54,10 +82,41 @@ def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
                 queue.put([totalCost,''.join(childString), childIndOfZero, childMoves])
                 #inserts to queue with tuple of string of game, index of 0, and moves taken
 
-                print("cost: ", totalCost, "string:" ,childString, "moves: ", childMoves, "expand count:", numOfExpands)
                 numOfExpands += 1
 
     return ('FAILURE', numOfExpands)  
+
+def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
+    numOfExpands = 0
+    initState = state
+    zeroInd = state.index('0')
+
+    queue = [(initState, zeroInd, "")]
+    visited = {}
+
+    while len(queue) > 0:
+        
+        if numOfExpands > EXPAND_LIMIT:
+            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
+
+        currState = queue.pop(0) #makes the current state of the game the state of the game that pops off the queue
+        (currStringOfGame, indOfZero, moves) = currState 
+        #unpacks and assigns values to new tuple
+
+        if currStringOfGame == goal:
+            #once goal state is found return the moves and num of expands to get there
+            return(moves, numOfExpands)
+
+        numOfExpands += 1
+
+        for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
+            if not visited.get(str(currStringOfGame)):
+                #if the state is not visited already explore
+                visited[str(currStringOfGame)] = True
+                queue.append((''.join(currStringOfGame), indOfZero, moves))
+                #updates queue with tuple of string of game, index of 0, and moves taken
+
+    return ('FAILURE', numOfExpands)    
 
 def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
     numOfExpands = 0
@@ -140,6 +199,7 @@ def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
         if numOfExpands > EXPAND_LIMIT:
             return (f'Exceeded expansion limit: ', numOfExpands)
 
+
         currState = queue.get()
         (estCost, currCost, currLevel, currStringOfGame, indOfZero, moves) = currState 
         
@@ -205,6 +265,7 @@ def manhattan_distance(state: str, gameSize: int) -> int:
     """
     Manhattan distance heuristic
     finds the total manhattan distanc of the game
+    running sum of total offsets of chars and indexes
     """
     totalManDist = 0
     for char in state:

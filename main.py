@@ -9,18 +9,19 @@ def main():
     (p,e) = a_star_search("120345678", "125340678",3)
     print((p,e))
 
-    algos = [algorithms.a_star_search]
+    algos = [algorithms.iter_deepening_A, algorithms.breadth_first_search,algorithms.depth_first_search,algorithms.IterativeDeepeningDepthFirstSearch]
     algorithm_names = {
         algorithms.breadth_first_search: "BFS",
         algorithms.depth_first_search: "DFS",
         algorithms.iter_deepening_A: "Iter_Deep_A",
-        algorithms.a_star_search: "A_Star_search"
+        algorithms.IterativeDeepeningDepthFirstSearch: "IDDFS"
     }
 
     f = NULL
     game_to_solve = game()
 
     for func in algos:
+        print("Running")#to make sure it started
         for file_name in os.listdir("./"):
             if file_name.endswith(".txt"):
                 f = open(file_name, 'r')
