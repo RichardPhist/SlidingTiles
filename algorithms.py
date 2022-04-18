@@ -72,7 +72,7 @@ def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
 
     return ('FAILURE', numOfExpands)
 
-def IterativeDeepeningDepthFirstSearch(state: str, goal: str, size: int) -> Tuple[str, int]:
+def iter_deep_dfs(state: str, goal: str, size: int) -> Tuple[str, int]:
     numOfExpands = 0 #initializing values and the stack
     expanded = {}
     StartState = list(state)

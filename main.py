@@ -10,15 +10,15 @@ def main():
     algos = [
         algorithms.breadth_first_search, #BFS
         algorithms.depth_first_search, #DFS
-        algorithms.IterativeDeepeningDepthFirstSearch, #Iterative Deep
-         algorithms.a_star_search, #A star
+        algorithms.iter_deep_dfs, #Iterative Deep
+        algorithms.a_star_search, #A star
         algorithms.iter_deepening_A #Iterative Deep A Star
         ]
 
     algorithm_names = { #hashtable to get algorithm names
         algorithms.breadth_first_search: "BFS",
         algorithms.depth_first_search: "DFS",
-        algorithms.IterativeDeepeningDepthFirstSearch: "IDDFS",
+        algorithms.iter_deep_dfs: "IDDFS",
         algorithms.a_star_search: "A Star",
         algorithms.iter_deepening_A: "Iter_Deep_A",
     }
