@@ -1,6 +1,7 @@
 from typing import Tuple
 from typing import List
 
+#helper function that determines if moves are valid
 def validMoves(zeroInd, gameSize, move):
         if move == 'l':
             if zeroInd % gameSize == 0:
@@ -17,36 +18,41 @@ def validMoves(zeroInd, gameSize, move):
 
 class game:
     def left(cls, position, zeroInd, gameSize):
-        #moves the 0 tile to the left
+        #checks if move is valid
         if validMoves(zeroInd,gameSize,'l') is False:
             return (position,zeroInd)
+
+        #moves the 0 tile to the left
         position = cls.swap(position, zeroInd, zeroInd - 1)
         zeroInd = zeroInd - 1
         return (position, zeroInd)
 
     def right(cls, position, zeroInd: int, gameSize: int):
-        #moves the 0 tile to the right
+        #checks if move is valid
         if validMoves(zeroInd,gameSize,'r') is False:
             return (position,zeroInd)
 
+        #moves the 0 tile to the right
         position = cls.swap(position, zeroInd, zeroInd + 1)
         zeroInd = zeroInd + 1
         return (position, zeroInd)
     
     def up(cls, position, zeroInd, gameSize: int):
-        #moves the 0 tile up
+        #checks if move is valid
         if validMoves(zeroInd,gameSize,'u') is False:
             return (position,zeroInd)
         
+        #moves the 0 tile up
         position = cls.swap(position, zeroInd, zeroInd - gameSize)
         zeroInd = zeroInd - gameSize
         return (position, zeroInd)
 
     def down(cls, position, zeroInd, gameSize):
-        #moves the 0 tile down
+        #checks if move is valid
         if validMoves(zeroInd,gameSize,'d') is False:
             return (position,zeroInd)
         
+        #moves the 0 tile down
         position = cls.swap(position, zeroInd, zeroInd +gameSize)
         zeroInd = zeroInd + gameSize
         return (position, zeroInd)
