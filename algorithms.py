@@ -8,7 +8,71 @@ from GameFrame import game
 EXPAND_LIMIT = 5000000
 gameinstance = game()
 
-def IterativeDeepeningDepthFirstSearch(state: str, goal: str, size: int) -> Tuple[str, int]:
+def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
+    numOfExpands = 0
+    initState = state
+    zeroInd = state.index('0')
+
+    queue = [(initState, zeroInd, "")]
+    visited = {}
+
+    while len(queue) > 0:
+        
+        if numOfExpands > EXPAND_LIMIT:
+            return ("Exceeded expansion limit:", numOfExpands)
+
+        currState = queue.pop(0) #makes the current state of the game the state of the game that pops off the queue
+        (currStringOfGame, indOfZero, moves) = currState 
+        #unpacks and assigns values to new tuple
+
+        if currStringOfGame == goal:
+            #once goal state is found return the moves and num of expands to get there
+            return(moves, numOfExpands)
+
+        numOfExpands += 1
+
+        for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
+            if not visited.get(str(currStringOfGame)):
+                #if the state is not visited already explore
+                visited[str(currStringOfGame)] = True
+                queue.append((''.join(currStringOfGame), indOfZero, moves))
+                #inserts to back of queue with tuple of string of game, index of 0, and moves taken
+
+    return ('FAILURE', numOfExpands)
+
+def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
+    numOfExpands = 0
+    initState = state
+    zeroInd = state.index('0')
+
+    queue = [(initState, zeroInd, "")]
+    visited = {}
+
+    while len(queue) > 0:
+        
+        if numOfExpands > EXPAND_LIMIT:
+            return ("Exceeded expansion limit:", numOfExpands)
+
+        currState = queue.pop(-1) #makes the current state of the game the state of the game that pops off the stack
+        (currStringOfGame, indOfZero, moves) = currState 
+        #unpacks and assigns values to new tuple
+
+        if currStringOfGame == goal:
+            #once goal state is found return the moves and num of expands to get there
+            return(moves, numOfExpands)
+
+        numOfExpands += 1
+
+        for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
+            if not visited.get(str(currStringOfGame)):
+                #if the state is not visited already explore
+                visited[str(currStringOfGame)] = 2
+                queue.append((''.join(currStringOfGame), indOfZero, moves))
+                #inserts to back of queue with tuple of string of game, index of 0, and moves taken
+
+    return ('FAILURE', numOfExpands)
+
+def iter_deep_dfs(state: str, goal: str, size: int) -> Tuple[str, int]:
     numOfExpands = 0 #initializing values and the stack
     expanded = {}
     StartState = list(state)
@@ -85,102 +149,6 @@ def a_star_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
                 numOfExpands += 1
 
     return ('FAILURE', numOfExpands)  
-
-def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
-    numOfExpands = 0
-    initState = state
-    zeroInd = state.index('0')
-
-    queue = [(initState, zeroInd, "")]
-    visited = {}
-
-    while len(queue) > 0:
-        
-        if numOfExpands > EXPAND_LIMIT:
-            return (f'Exceeded limit of {EXPAND_LIMIT} expansions', numOfExpands)
-
-        currState = queue.pop(0) #makes the current state of the game the state of the game that pops off the queue
-        (currStringOfGame, indOfZero, moves) = currState 
-        #unpacks and assigns values to new tuple
-
-        if currStringOfGame == goal:
-            #once goal state is found return the moves and num of expands to get there
-            return(moves, numOfExpands)
-
-        numOfExpands += 1
-
-        for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
-            if not visited.get(str(currStringOfGame)):
-                #if the state is not visited already explore
-                visited[str(currStringOfGame)] = True
-                queue.append((''.join(currStringOfGame), indOfZero, moves))
-                #updates queue with tuple of string of game, index of 0, and moves taken
-
-    return ('FAILURE', numOfExpands)    
-
-def breadth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
-    numOfExpands = 0
-    initState = state
-    zeroInd = state.index('0')
-
-    queue = [(initState, zeroInd, "")]
-    visited = {}
-
-    while len(queue) > 0:
-        
-        if numOfExpands > EXPAND_LIMIT:
-            return ("Exceeded expansion limit:", numOfExpands)
-
-        currState = queue.pop(0) #makes the current state of the game the state of the game that pops off the queue
-        (currStringOfGame, indOfZero, moves) = currState 
-        #unpacks and assigns values to new tuple
-
-        if currStringOfGame == goal:
-            #once goal state is found return the moves and num of expands to get there
-            return(moves, numOfExpands)
-
-        numOfExpands += 1
-
-        for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
-            if not visited.get(str(currStringOfGame)):
-                #if the state is not visited already explore
-                visited[str(currStringOfGame)] = True
-                queue.append((''.join(currStringOfGame), indOfZero, moves))
-                #inserts to back of queue with tuple of string of game, index of 0, and moves taken
-
-    return ('FAILURE', numOfExpands)
-
-def depth_first_search(state: str, goal: str, gameSize: int) -> Tuple[str, int]:
-    numOfExpands = 0
-    initState = state
-    zeroInd = state.index('0')
-
-    queue = [(initState, zeroInd, "")]
-    visited = {}
-
-    while len(queue) > 0:
-        
-        if numOfExpands > EXPAND_LIMIT:
-            return ("Exceeded expansion limit:", numOfExpands)
-
-        currState = queue.pop(-1) #makes the current state of the game the state of the game that pops off the stack
-        (currStringOfGame, indOfZero, moves) = currState 
-        #unpacks and assigns values to new tuple
-
-        if currStringOfGame == goal:
-            #once goal state is found return the moves and num of expands to get there
-            return(moves, numOfExpands)
-
-        numOfExpands += 1
-
-        for (currStringOfGame, indOfZero, moves) in expand(currState, gameSize):
-            if not visited.get(str(currStringOfGame)):
-                #if the state is not visited already explore
-                visited[str(currStringOfGame)] = 2
-                queue.append((''.join(currStringOfGame), indOfZero, moves))
-                #inserts to back of queue with tuple of string of game, index of 0, and moves taken
-
-    return ('FAILURE', numOfExpands)
 
 def iter_deepening_A(state: str, goal: str, gameSize: int) -> Tuple[str, int]: 
     queue = PriorityQueue()

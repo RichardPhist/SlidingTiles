@@ -6,14 +6,20 @@ from GameFrame import game
 
 def main():
 
+    algos = [
+        algorithms.breadth_first_search, #BFS
+        algorithms.depth_first_search, #DFS
+        algorithms.iter_deep_dfs, #Iterative Deep
+        algorithms.a_star_search, #A star
+        algorithms.iter_deepening_A #Iterative Deep A Star
+        ]
 
-    algos = [algorithms.a_star_search]
-    algorithm_names = {
+    algorithm_names = { #hashtable to get algorithm names
         algorithms.breadth_first_search: "BFS",
         algorithms.depth_first_search: "DFS",
+        algorithms.iter_deep_dfs: "IDDFS",
+        algorithms.a_star_search: "A Star",
         algorithms.iter_deepening_A: "Iter_Deep_A",
-        algorithms.IterativeDeepeningDepthFirstSearch: "IDDFS",
-        algorithms.a_star_search: "AStar"
     }
 
     f = NULL
